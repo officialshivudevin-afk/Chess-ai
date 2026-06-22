@@ -1,96 +1,36 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <meta charset="UTF-8">
-<title>Chess AI</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://unpkg.com/chess.js@0.13.4/chess.min.js"></script>
-
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-
+<title>Test Board</title>
 <style>
-body {
-  text-align: center;
-  font-family: Arial;
-  background: #f2f2f2;
+#board{
+width:320px;
+height:320px;
+border:2px solid black;
+margin:20px auto;
+display:grid;
+grid-template-columns:repeat(8,1fr);
 }
-
-#board {
-  width: 320px;
-  margin: 20px auto;
+.square{
+width:40px;
+height:40px;
 }
-
-select {
-  padding: 8px;
-  font-size: 16px;
-}
+.white{background:#f0d9b5;}
+.black{background:#b58863;}
 </style>
 </head>
+<body><h1>Chess Test</h1><div id="board"></div><script>
+const board=document.getElementById("board");
 
-<body>
-
-<h2>♟️ Chess AI</h2>
-
-<select id="difficulty">
-  <option value="easy">Easy</option>
-  <option value="hard">Hard</option>
-  <option value="impossible">Impossible</option>
-</select>
-
-<div id="board"></div>
-
-<script>
-var game = new Chess();
-
-var board = Chessboard('board', {
-  draggable: true,
-  position: 'start',
-  pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/dist/img/chesspieces/wikipedia/{piece}.png',
-  onDrop: onDrop
-});
-
-function onDrop(source, target) {
-  var move = game.move({
-    from: source,
-    to: target,
-    promotion: 'q'
-  });
-
-  if (move === null) return 'snapback';
-
-  setTimeout(aiMove, 300);
+for(let row=0;row<8;row++){
+  for(let col=0;col<8;col++){
+    const sq=document.createElement("div");
+    sq.className=
+      (row+col)%2===0
+      ?"square white"
+      :"square black";
+    board.appendChild(sq);
+  }
 }
-
-function aiMove() {
-  var level = document.getElementById("difficulty").value;
-  var moves = game.moves();
-
-  if (moves.length === 0) return;
-
-  var move;
-
-  if (level === "easy") {
-    move = moves[Math.floor(Math.random() * moves.length)];
-  }
-  else if (level === "hard") {
-    var captures = moves.filter(m => m.includes("x"));
-    move = captures.length
-      ? captures[Math.floor(Math.random() * captures.length)]
-      : moves[Math.floor(Math.random() * moves.length)];
-  }
-  else {
-    move = moves[Math.floor(Math.random() * moves.length)];
-  }
-
-  game.move(move);
-  board.position(game.fen());
-}
-</script>
-
-</body>
+</script></body>
 </html>
