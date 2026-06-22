@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
 <meta charset="UTF-8">
-<title>Chess AI</title>
-
-<link rel="stylesheet"
-href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-
-<style>
+<title>Chess AI</title><link rel="stylesheet"
+href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"><style>
 body {
   text-align: center;
   font-family: Arial;
@@ -17,80 +12,59 @@ body {
   width: 320px;
   margin: 20px auto;
 }
-</style>
-</head>
-
-<body>
-
-<h2>Chess AI</h2>
-
-<select id="difficulty">
+</style></head><body><h2>Chess AI</h2><select id="difficulty">
   <option value="easy">Easy</option>
   <option value="hard">Hard</option>
   <option value="impossible">Impossible</option>
-</select>
+</select><div id="board"></div><!-- Scripts --><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><script src="https://unpkg.com/chess.js@0.13.4/chess.min.js"></script><script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script><script>
+document.addEventListener("DOMContentLoaded", function() {
 
-<div id="board"></div>
+  const game = new Chess();
 
-<!-- ✅ LOAD SCRIPTS AT BOTTOM (IMPORTANT) -->
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://unpkg.com/chess.js@0.13.4/chess.min.js"></script>
-
-<script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-
-<script>
-window.onload = function(){
-
-var game = new Chess();
-
-var board = Chessboard('board', {
-  draggable: true,
-  position: 'start',
-  pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/dist/img/chesspieces/wikipedia/{piece}.png',
-  onDrop: onDrop
-});
-
-function onDrop(source, target) {
-  var move = game.move({
-    from: source,
-    to: target,
-    promotion: 'q'
+  const board = Chessboard('board', {
+    draggable: true,
+    position: 'start',
+    pieceTheme: 'https://unpkg.com/chessboardjs@1.0.0/dist/img/chesspieces/wikipedia/{piece}.png',
+    onDrop: onDrop
   });
 
-  if (move === null) return 'snapback';
+  function onDrop(source, target) {
+    const move = game.move({
+      from: source,
+      to: target,
+      promotion: 'q'
+    });
 
-  setTimeout(aiMove, 300);
-}
+    if (move === null) return 'snapback';
 
-function aiMove() {
-  var level = document.getElementById("difficulty").value;
-  var moves = game.moves();
-
-  if (moves.length === 0) return;
-
-  var move;
-
-  if (level === "easy") {
-    move = moves[Math.floor(Math.random() * moves.length)];
-  }
-  else if (level === "hard") {
-    var captures = moves.filter(m => m.includes("x"));
-    move = captures.length
-      ? captures[Math.floor(Math.random() * captures.length)]
-      : moves[Math.floor(Math.random() * moves.length)];
-  }
-  else {
-    move = moves[Math.floor(Math.random() * moves.length)];
+    setTimeout(aiMove, 300);
   }
 
-  game.move(move);
-  board.position(game.fen());
-}
+  function aiMove() {
+    const level = document.getElementById("difficulty").value;
+    const moves = game.moves();
 
-};
-</script>
+    if (moves.length === 0) return;
 
-</body>
+    let move;
+
+    if (level === "easy") {
+      move = moves[Math.floor(Math.random() * moves.length)];
+    }
+    else if (level === "hard") {
+      const captures = moves.filter(m => m.includes("x"));
+      move = captures.length
+        ? captures[Math.floor(Math.random() * captures.length)]
+        : moves[Math.floor(Math.random() * moves.length)];
+    }
+    else {
+      move = moves[Math.floor(Math.random() * moves.length)];
+    }
+
+    game.move(move);
+    board.position(game.fen());
+  }
+
+});
+</script></body>
 </html>
