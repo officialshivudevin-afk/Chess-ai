@@ -17,18 +17,24 @@ href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
 body {
   text-align: center;
   font-family: Arial;
+  background: #f2f2f2;
 }
 
 #board {
   width: 320px;
-  margin: auto;
+  margin: 20px auto;
+}
+
+select {
+  padding: 8px;
+  font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>Chess AI</h2>
+<h2>♟️ Chess AI</h2>
 
 <select id="difficulty">
   <option value="easy">Easy</option>
@@ -70,12 +76,14 @@ function aiMove() {
 
   if (level === "easy") {
     move = moves[Math.floor(Math.random() * moves.length)];
-  } else if (level === "hard") {
+  }
+  else if (level === "hard") {
     var captures = moves.filter(m => m.includes("x"));
     move = captures.length
       ? captures[Math.floor(Math.random() * captures.length)]
       : moves[Math.floor(Math.random() * moves.length)];
-  } else {
+  }
+  else {
     move = moves[Math.floor(Math.random() * moves.length)];
   }
 
