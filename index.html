@@ -5,13 +5,13 @@
 <title>Chess AI</title>
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard-1.0.0.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard.min.css">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard-1.0.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/chessboard.min.js"></script>
 
 <style>
 body{
@@ -23,12 +23,6 @@ padding:20px;
 #board{
 width:350px;
 margin:auto;
-}
-
-select{
-padding:8px;
-margin:10px;
-font-size:16px;
 }
 </style>
 </head>
@@ -52,6 +46,11 @@ var game = new Chess();
 var board = Chessboard('board',{
 draggable:true,
 position:'start',
+
+// 🔥 IMPORTANT FIX (image path)
+pieceTheme:
+'https://cdnjs.cloudflare.com/ajax/libs/chessboard.js/1.0.0/img/chesspieces/wikipedia/{piece}.png',
+
 onDrop:onDrop
 });
 
@@ -67,12 +66,10 @@ if(move===null){
 return 'snapback';
 }
 
-window.setTimeout(aiMove,300);
+setTimeout(aiMove,300);
 }
 
 function aiMove(){
-
-if(game.game_over()) return;
 
 var level =
 document.getElementById("difficulty").value;
