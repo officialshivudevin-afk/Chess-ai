@@ -1,0 +1,139 @@
+<!DOCTYPE html><html>
+<head>
+<meta charset="UTF-8">
+<title>Chess Game</title><style>
+body {
+  text-align: center;
+  font-family: Arial;
+}
+
+#board {
+  width: 320px;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.square {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.white { background: #f0d9b5; }
+.black { background: #b58863; }
+
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+</style></head><body><h2>♟️ Chess vs Computer</h2><button onclick="startGame()">Start Game</button>
+
+<div id="board"></div><script>
+
+let boardEl = document.getElementById("board");
+
+let pieces = {
+  r:"♜", n:"♞", b:"♝", q:"♛", k:"♚", p:"♟",
+  R:"♖", N:"♘", B:"♗", Q:"♕", K:"♔", P:"♙"
+};
+
+let game;
+
+function startGame() {
+  game = [
+    "rnbqkbnr",
+    "pppppppp",
+    "........",
+    "........",
+    "........",
+    "........",
+    "PPPPPPPP",
+    "RNBQKBNR"
+  ];
+  drawBoard();
+}
+
+function drawBoard() {
+  boardEl.innerHTML = "";
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      let square = document.createElement("div");
+
+      square.className =
+        "square " + ((i + j) % 2 == 0 ? "white" : "black");
+
+      let piece = game[i][j];
+
+      square.innerText = pieces[piece] || "";
+
+      square.onclick = () => move(i, j);
+
+      boardEl.appendChild(square);
+    }
+  }
+}
+
+let selected = null;
+
+function move(i, j) {
+  if (!selected) {
+    if (game[i][j] !== "." && game[i][j] === game[i][j].toUpperCase()) {
+      selected = {i, j};
+    }
+  } else {
+    game[i] =
+      game[i].substring(0, j) +
+      game[selected.i][selected.j] +
+      game[i].substring(j + 1);
+
+    game[selected.i] =
+      game[selected.i].substring(0, selected.j) +
+      "." +
+      game[selected.i].substring(selected.j + 1);
+
+    selected = null;
+
+    drawBoard();
+
+    setTimeout(aiMove, 500);
+  }
+}
+
+function aiMove() {
+  let moves = [];
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (game[i][j] !== "." && game[i][j] === game[i][j].toLowerCase()) {
+        let ni = i + 1;
+        if (ni < 8) {
+          moves.push({i, j, ni, nj:j});
+        }
+      }
+    }
+  }
+
+  if (moves.length === 0) return;
+
+  let m = moves[Math.floor(Math.random() * moves.length)];
+
+  game[m.ni] =
+    game[m.ni].substring(0, m.nj) +
+    game[m.i][m.j] +
+    game[m.ni].substring(m.nj + 1);
+
+  game[m.i] =
+    game[m.i].substring(0, m.j) +
+    "." +
+    game[m.i].substring(m.j + 1);
+
+  drawBoard();
+}
+
+</script></body>
+</html>
