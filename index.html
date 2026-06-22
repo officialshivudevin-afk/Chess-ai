@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chess AI</title>
+  <script src="https://cdn.jsdelivr.net/npm/chess.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chessboardjs"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs/dist/chessboard-1.0.0.min.css">
+</head>
+
+<body>
+  <h2>Chess AI (Easy / Hard / Impossible)</h2>
+
+  <select id="level">
+    <option value="easy">Easy</option>
+    <option value="hard">Hard</option>
+    <option value="impossible">Impossible</option>
+  </select>
+
+  <div id="board" style="width: 350px"></div>
+
+  <script>
+    var game = new Chess();
+
+    var board = Chessboard('board', {
+      draggable: true,
+      position: 'start',
+      onDrop: onDrop
+    });
+
+    function onDrop(source, target) {
+      var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q'
+      });
+
+      if (move === null) return 'snapback';
+
+      setTimeout(makeAIMove, 300);
+    }
+
+    function makeAIMove() {
+      var level = document.getElementById("level").value;
+
+      if (level === "easy") {
+        randomMove();
+      } else if (level === "hard") {
+        randomMove(); // upgrade later
+      } else {
+        randomMove(); // will replace with Stockfish
+      }
+
+      board.position(game.fen());
+    }
+
+    function randomMove() {
+      var moves = game.moves();
+      var move = moves[Math.floor(Math.random() * moves.length)];
+      game.move(move);
+    }
+  </script>
+</body>
+  </html>
